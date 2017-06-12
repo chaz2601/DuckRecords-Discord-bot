@@ -30,6 +30,7 @@ module.exports = (bot) => {
 			embed.setThumbnail("https://quack.life/duckrecords/currentart?" + getRandomInt(0, 999999))
 			embed.setFooter('DuckRecords')
 
+			message.channel.sendEmbed(embed)
 		});
 	})
 }
