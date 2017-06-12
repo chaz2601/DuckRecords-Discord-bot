@@ -43,13 +43,21 @@ module.exports = (bot) => {
 				message.reply('Radio not live')
 				return
 			}
+			if(info.streams[0].songtitle == null || info.streams[0].currentlisteners == null) {
+				message.reply("Not receiving enough info")
+				return
+			}
 
 			let embed = new Discord.RichEmbed();
 			embed.setColor(0x9900FF)
 			embed.setTitle('DuckRecords')
-			embed.addField("Now Playing: ", info.streams[0].songtitle, true)
-			embed.addField("Up next: ", info.streams[0].nexttitle, true)
-			embed.addField("Listeners: ", info.streams[0].currentlisteners, true)
+			embed.addField("Now Playing: ", info.streams[0].songtitle)
+			if(info.streams[0].nexttitle != null) {
+				embed.addField("Up next: ", info.streams[0].nexttitle)
+			}else {
+				embed.addEmpty()
+			}
+			embed.addField("Listeners: ", info.streams[0].currentlisteners)
 			embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
 			embed.setFooter('DuckRecords')
 
