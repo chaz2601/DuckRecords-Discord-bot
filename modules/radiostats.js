@@ -6,7 +6,7 @@ module.exports = (bot) => {
 
 	function updateGame(){
 		request("https://quack.life/duckrecords/stats",
-		    function(err,res,body){
+		    (err,res,body) => {
 		    	if(err) {
 		    		bot.setGame("Couldn't update status retrying.")
 		    		return
@@ -47,8 +47,6 @@ module.exports = (bot) => {
 			embed.addField("Now Playing: ", info.streams[0].songtitle)
 			if(info.streams[0].nexttitle != null) {
 				embed.addField("Up next: ", info.streams[0].nexttitle)
-			}else {
-				embed.addEmpty()
 			}
 			embed.addField("Listeners: ", info.streams[0].currentlisteners)
 			embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
