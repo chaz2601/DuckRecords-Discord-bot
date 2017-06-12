@@ -36,7 +36,7 @@ module.exports = (bot) => {
 				message.reply('Radio not live')
 				return
 			}
-			if(info.streams[0].songtitle == null || info.streams[0].currentlisteners == null) {
+			if(info.streams[0].songtitle == null || info.streams[0].uniquelisteners == null) {
 				message.reply("Not receiving enough info")
 				return
 			}
@@ -48,7 +48,7 @@ module.exports = (bot) => {
 			if(info.streams[0].nexttitle != null) {
 				embed.addField("Up next: ", info.streams[0].nexttitle)
 			}
-			embed.addField("Listeners: ", info.streams[0].currentlisteners)
+			embed.addField("Unique-Listeners: ", info.streams[0].uniquelisteners)
 			embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
 			embed.setFooter('DuckRecords')
 
