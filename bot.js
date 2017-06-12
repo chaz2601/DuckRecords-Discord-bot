@@ -11,5 +11,7 @@ client.login(process.env.BOT_TOKEN || process.argv[2])
 const bot = new TortleBot(client);
 
 bot.registerModule(require('./modules/radiostats'));
+bot.registerModule(require('./modules/radioplay'));
+bot.registerModule(require('./modules/help'));
 
 process.on('unhandledRejection', console.error);
