@@ -2,13 +2,6 @@ const request = require('request')
 const Discord = require("discord.js");
 const md5 = require('md5');
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-
 module.exports = (bot) => {
 
 	function updateGame(){
