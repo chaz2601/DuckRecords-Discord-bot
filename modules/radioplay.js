@@ -15,19 +15,29 @@ var options = {
   }
 };
 
-let radiostream = new stream.PassThrough;
+const streamOptions = { seek: 0, volume: 1 };
+
+var radiostream
 var radiostreamreq
 
 function getStream() {
+	radiostream = new stream.PassThrough;
 	radiostreamreq = request(options)
 	radiostreamreq.pipe(radiostream)
 }
 getStream()
 
+function restartStream() {
+	getStream()
+	for(key in connections) {
+		connections[key].playStream(radiostream, streamOptions)
+	}
+}
+
 radiostreamreq.on('error', (error) => {
 	console.error(error)
 	console.error('Retrying in 2 seconds')
-	setTimeout(getStream, 2000)
+	setTimeout(restartStream, 2000)
 })
 
 
@@ -52,7 +62,6 @@ module.exports = (bot) => {
             
         if (!message.guild.voiceConnection) {
             if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
-				const streamOptions = { seek: 0, volume: 1 };
 				voiceChannel.join()
 				.then(connection => {
 				connections[id] = connection
