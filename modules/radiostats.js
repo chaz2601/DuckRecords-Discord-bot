@@ -30,30 +30,31 @@ module.exports = (bot) => {
 	})
 
 	bot.addTraditionalCommand('nowplaying', message => {
-			let info = bot.get('radioinfo')
+		let info = bot.get('radioinfo')
 
-			if(info.streams[0].bitrate == '0') {
-				message.reply('Radio not live')
-				return
-			}
-			if(info.streams[0].songtitle == null || info.streams[0].uniquelisteners == null) {
-				message.reply("Not receiving enough info")
-				return
-			}
+		if(info.streams[0].bitrate == '0') {
+			message.reply('Radio not live')
+			return
+		}
+		if(info.streams[0].songtitle == null || info.streams[0].uniquelisteners == null) {
+			message.reply("Not receiving enough info")
+			return
+		}
 
-			let embed = new Discord.RichEmbed();
-			embed.setColor(0x9900FF)
-			embed.setTitle('DuckRecords')
-			embed.addField("Now Playing: ", info.streams[0].songtitle)
-			if(info.streams[0].nexttitle != null) {
-				embed.addField("Up next: ", info.streams[0].nexttitle)
-			}
-			var listeners = info.streams[0].uniquelisteners -1 //subtract the bot
-			listeners += bot.get('voiceListeners') || 0;
-			embed.addField("Listeners: ", listeners)
-			embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
-			embed.setFooter('DuckRecords')
+		let embed = new Discord.RichEmbed();
+		embed.setColor(0x9900FF)
+		embed.setTitle('DuckRecords')
+		embed.addField("Now Playing: ", info.streams[0].songtitle)
+		if(info.streams[0].nexttitle != null) {
+			embed.addField("Up next: ", info.streams[0].nexttitle)
+		}
+		var listeners = info.streams[0].uniquelisteners -1 //subtract the bot
+		listeners += bot.get('voiceListeners') || 0;
+		embed.addField("Listeners: ", listeners)
+		embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
+		embed.setFooter('DuckRecords')
+		embed.setURL('https://github.com/TortleWortle/DuckRecords-Discord-bot')
 
-			message.channel.send({embed})
+		message.channel.send({embed})
 	})
 }

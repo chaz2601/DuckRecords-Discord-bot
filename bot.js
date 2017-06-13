@@ -14,6 +14,6 @@ bot.setPrefix(">")
 
 bot.registerModule(require('./modules/radiostats'));
 bot.registerModule(require('./modules/radioplay'));
-bot.registerModule(require('./modules/help'));
+bot.registerModule(require('./modules/utilities'));
 
 process.on('unhandledRejection', console.error);
