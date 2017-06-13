@@ -48,7 +48,9 @@ module.exports = (bot) => {
 			if(info.streams[0].nexttitle != null) {
 				embed.addField("Up next: ", info.streams[0].nexttitle)
 			}
-			embed.addField("Unique-Listeners: ", info.streams[0].uniquelisteners)
+			var listeners = info.streams[0].uniquelisteners -1 //subtract the bot
+			listeners += bot.get('voiceListeners') || 0;
+			embed.addField("Listeners: ", listeners)
 			embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
 			embed.setFooter('DuckRecords')
 

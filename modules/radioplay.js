@@ -8,8 +8,6 @@ const connections = []
 
 var options = {
   url: "https://quack.life/duckrecords/listen.m3u",
-  forever: false,
-  timeout: 5*1000,
   headers: {
     'User-Agent': 'DuckRecordsBot'
   }
@@ -24,21 +22,18 @@ function getStream() {
 	radiostream = new stream.PassThrough;
 	radiostreamreq = request(options)
 	radiostreamreq.pipe(radiostream)
-}
-getStream()
 
-function restartStream() {
-	getStream()
 	for(key in connections) {
 		connections[key].playStream(radiostream, streamOptions)
 	}
-}
 
-radiostreamreq.on('error', (error) => {
-	console.error(error)
-	console.error('Retrying in 2 seconds')
-	setTimeout(restartStream, 2000)
-})
+	radiostreamreq.on('error', (error) => {
+		console.error(error)
+		console.error('Retrying in 2 seconds')
+		setTimeout(getStream, 2000)
+	})
+}
+getStream()
 
 
 
@@ -46,13 +41,17 @@ module.exports = (bot) => {
 
 	bot.client.on('ready', () => {
 		setInterval(()=> {
-
+			let listeners = 0;
 			for (key in connections) {
 				//not sure how javascript handles this so better safe than sorry
 				if(connections[key].channel.members.keyArray().length == 1) {
 					disconnectVoice(key)
+				}else {
+					//subtract the bot
+					listeners += connections[key].channel.members.keyArray().length -1
 				}
 			}
+			bot.set('voiceListeners', listeners)
 		}, 5 * 1000)
 	})
 
