@@ -15,44 +15,58 @@ var options = {
 
 const streamOptions = { seek: 0, volume: 1 };
 
-var radiostream
-var radiostreamreq
-
-function getStream() {
-	radiostream = new stream.PassThrough;
-	radiostreamreq = request(options)
-	radiostreamreq.pipe(radiostream)
-
-	for(key in connections) {
-		connections[key].playStream(radiostream, streamOptions)
-	}
-
-	radiostreamreq.on('error', (error) => {
-		console.error(error)
-		console.error('Retrying in 2 seconds')
-		setTimeout(getStream, 2000)
-	})
-}
-getStream()
 
 
 
 module.exports = (bot) => {
 
+	const broadcast = bot.client.createVoiceBroadcast();
+
+	function getStream() {
+		var radiostreamreq = request(options)
+		broadcast.playStream(radiostreamreq)
+
+		for (const connection of bot.client.voiceConnections.values()) {
+		  connection.playBroadcast(broadcast);
+		}
+
+		radiostreamreq.on('error', (error) => {
+			console.error(error)
+			console.error('Retrying in 2 seconds')
+			setTimeout(getStream, 2000)
+		})
+		radiostreamreq.on('end', () => {
+			console.error('Connection ended retrying in 2 seconds.')
+			setTimeout(getStream, 2000)
+		})
+		radiostreamreq.on('abort', () => {
+			console.error('Connection aborted retrying in 2 seconds.')
+			setTimeout(getStream, 2000)
+		})
+	}
+
 	bot.client.on('ready', () => {
+
+		getStream()
+
+
 		setInterval(()=> {
 			let listeners = 0;
-			for (key in connections) {
+			for (const connection of bot.client.voiceConnections.values()) {
 				//not sure how javascript handles this so better safe than sorry
-				if(connections[key].channel.members.keyArray().length == 1) {
-					disconnectVoice(key)
+				if(connection.channel.members.keyArray().length == 1) {
+					connection.disconnect
 				}else {
 					//subtract the bot
-					listeners += connections[key].channel.members.keyArray().length -1
+					listeners += connection.channel.members.keyArray().length -1
 				}
 			}
 			bot.set('voiceListeners', listeners)
 		}, 5 * 1000)
+	})
+
+	bot.addTraditionalCommand('getStream', (message) => {
+		getStream()
 	})
 
 	bot.addTraditionalCommand('play', (message) => {
@@ -64,7 +78,7 @@ module.exports = (bot) => {
 				voiceChannel.join()
 				.then(connection => {
 				connections[id] = connection
-   				connection.playStream(radiostream, streamOptions);             
+   				connection.playBroadcast(broadcast)            
 			})
         }
 	});
