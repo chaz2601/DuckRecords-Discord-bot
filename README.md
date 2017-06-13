@@ -6,7 +6,6 @@ It really just plays the shoutcast stream for discord users.
 ## TODO
 - Add sharding I guess, (job for tortlecore :3)
 - Better handling of stream disconnects (I'm looking at you chis)
-- Count overal listeners in all discord voice channels for a more accurate listener result (excluding the bot itself ofcourse)
 
 ## FAQ
 #### Why?
