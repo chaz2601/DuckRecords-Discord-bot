@@ -71,11 +71,10 @@ module.exports = (bot) => {
             
         if (!message.guild.voiceConnection) {
             if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
-				voiceChannel.join()
+			voiceChannel.join()
 				.then(connection => {
-				connections[id] = connection
-   				connection.playBroadcast(broadcast)            
-			})
+	   				connection.playBroadcast(broadcast)            
+				})
         }
 	});
 
@@ -83,21 +82,10 @@ module.exports = (bot) => {
 	bot.addTraditionalCommand('stop', (message) => {
 		if (message.guild.voiceConnection) {
             if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
-            	disconnectVoice(message.guild.id)
+            	message.guild.voiceConnection.disconnect()
 
         }else {
         	message.reply("Geez, I'm not even playing anything")
         }
 	})
-
-	function disconnectVoice(id) {
-		if(connections[id] != null) {
-			if(connections[id].dispatcher != null) {
-				connections[id].dispatcher.end()
-			}
-			connections[id].disconnect()
-            connections[id] = null
-            delete connections[id]
-        }
-	}
 }
