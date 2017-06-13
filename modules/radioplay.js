@@ -55,7 +55,7 @@ module.exports = (bot) => {
 			for (const connection of bot.client.voiceConnections.values()) {
 				//not sure how javascript handles this so better safe than sorry
 				if(connection.channel.members.keyArray().length == 1) {
-					connection.disconnect
+					connection.disconnect()
 				}else {
 					//subtract the bot
 					listeners += connection.channel.members.keyArray().length -1
