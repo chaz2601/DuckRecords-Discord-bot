@@ -15,4 +15,4 @@ Quack.
 Well if you ever wondered what's more shite than alpha, you're welcome!
 
 #### I know noone is asking these questions..
-That's not a question.
+Shush
