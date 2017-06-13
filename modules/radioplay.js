@@ -42,7 +42,7 @@ module.exports = (bot) => {
 		radiostreamreq.on('abort', () => {
 			console.error('Connection aborted retrying in 2 seconds.')
 			setTimeout(getStream, 2000)
-		})
+		})	
 	}
 
 	bot.client.on('ready', () => {
@@ -63,10 +63,6 @@ module.exports = (bot) => {
 			}
 			bot.set('voiceListeners', listeners)
 		}, 5 * 1000)
-	})
-
-	bot.addTraditionalCommand('getStream', (message) => {
-		getStream()
 	})
 
 	bot.addTraditionalCommand('play', (message) => {
