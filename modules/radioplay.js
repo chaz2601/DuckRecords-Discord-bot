@@ -81,9 +81,13 @@ module.exports = (bot) => {
 	})
 
 	function disconnectVoice(id) {
-			connections[id].dispatcher.end()
+		if(connections[id] != null) {
+			if(connections[id].dispatcher != null) {
+				connections[id].dispatcher.end()
+			}
 			connections[id].disconnect()
             connections[id] = null
             delete connections[id]
+        }
 	}
 }
