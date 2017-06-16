@@ -81,7 +81,7 @@ module.exports = (bot) => {
 
 	bot.addTraditionalCommand('stop', (message) => {
 		if (message.guild.voiceConnection) {
-            if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
+            if (!message.member.voiceChannel && message.author.id != '111439600286773248') return message.channel.sendMessage('You need to be in a voice channel')
             	message.guild.voiceConnection.disconnect()
 
         }else {
