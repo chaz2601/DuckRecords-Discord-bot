@@ -85,13 +85,17 @@ module.exports = (bot) => {
 
 			        	streams[message.guild.id].on("end", () => {
 			        		streams[message.guild.id] = null
-			        		connection.playBroadcast(broadcast)
+			        		setTimeout(() => {
+				        		connection.playBroadcast(broadcast)
+				        	}, 300)
 			        	})
 
 			        	streams[message.guild.id].on("error", (error) => {
 			        		streams[message.guild.id] = null
 			        		message.reply(error.message)
-			        		connection.playBroadcast(broadcast)
+			        		setTimeout(() => {
+				        		connection.playBroadcast(broadcast)
+				        	}, 300)
 			        	})
 			        })
 		        }
