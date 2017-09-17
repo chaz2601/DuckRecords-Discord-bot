@@ -1,7 +1,7 @@
 module.exports = (bot) => {
 	bot.addCommand("halp", payload => {
         var message = payload.message
-        var commands = bot.getTraditionalCommands()
+        var commands = bot.getCommands()
 
         if(commands.length) {
             var replyMsg = "U in need, I halp! \`\`\`"
