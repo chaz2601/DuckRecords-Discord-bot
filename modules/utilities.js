@@ -1,5 +1,6 @@
 module.exports = (bot) => {
-	bot.addTraditionalCommand("halp", message => {
+	bot.addCommand("halp", payload => {
+        var message = payload.message
         var commands = bot.getTraditionalCommands()
 
         if(commands.length) {

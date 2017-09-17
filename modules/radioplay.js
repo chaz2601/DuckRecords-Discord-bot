@@ -7,7 +7,7 @@ const connections = []
 
 
 var options = {
-  url: "https://quack.life/duckrecords/listen.m3u",
+  url: "http://streaming.radionomy.com/UBGRadio",
   headers: {
     'User-Agent': 'DuckRecordsBot'
   }
@@ -65,7 +65,8 @@ module.exports = (bot) => {
 		}, 5 * 1000)
 	})
 
-	bot.addTraditionalCommand('play', (message) => {
+	bot.addCommand('play', (payload) => {
+		var message = payload.message
 		let id = message.guild.id
 		let voiceChannel = message.member.voiceChannel
             
@@ -79,9 +80,10 @@ module.exports = (bot) => {
 	});
 
 
-	bot.addTraditionalCommand('stop', (message) => {
+	bot.addCommand('stop', (payload) => {
+		var message = payload.message
 		if (message.guild.voiceConnection) {
-            if (!message.member.voiceChannel && message.author.id != '111439600286773248') return message.channel.sendMessage('You need to be in a voice channel')
+            if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
             	message.guild.voiceConnection.disconnect()
 
         }else {

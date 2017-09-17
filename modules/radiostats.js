@@ -5,21 +5,29 @@ const md5 = require('md5');
 module.exports = (bot) => {
 
 	function updateGame(){
-		request("https://quack.life/duckrecords/stats",
+		request("http://chisdealhd.xyz/radio/np.php",
 		    (err,res,body) => {
 		    	if(err) {
 		    		bot.setGame("Couldn't update status retrying.")
 		    		return
 		    	}
 		        var data = JSON.parse(body);
+		        // console.log(data)
 		        bot.set('radioinfo', data);
 
-		        if(data.streams[0].bitrate == '0') {
+		        if(data.track.title == null) {
 					bot.setGame('with the radio')
 					return
 				}
+				var song = data.track.title + " - " + data.track.artists
 
-		        bot.setGame('Quacking: '+data.streams[0].songtitle)
+				var listeners = bot.get('voiceListeners', 0)
+
+				if(listeners == null) {
+					listeners = 0
+				}
+
+		        bot.setGame('Quacking '+ song + " to " + listeners + " old ladies.")
 			}
 		)
 	}
@@ -29,31 +37,30 @@ module.exports = (bot) => {
 		setInterval(updateGame, 10 * 1000)
 	})
 
-	bot.addTraditionalCommand('nowplaying', message => {
+	bot.addCommand('nowplaying', payload => {
+		var message = payload.message
 		let info = bot.get('radioinfo')
 
-		if(info.streams[0].bitrate == '0') {
+		if(info.track.title == null) {
 			message.reply('Radio not live')
-			return
-		}
-		if(info.streams[0].songtitle == null || info.streams[0].uniquelisteners == null) {
-			message.reply("Not receiving enough info")
 			return
 		}
 
 		let embed = new Discord.RichEmbed();
 		embed.setColor(0x9900FF)
-		embed.setTitle('DuckRecords')
-		embed.addField("Now Playing: ", info.streams[0].songtitle)
-		if(info.streams[0].nexttitle != null) {
-			embed.addField("Up next: ", info.streams[0].nexttitle)
+		embed.setTitle('QuackRecords')
+		embed.addField("Now Playing: ", info.track.title + " - " + info.track.artists)
+
+		var listeners = bot.get('voiceListeners', 0)
+
+		if(listeners == null) {
+			listeners = 0
 		}
-		var listeners = info.streams[0].uniquelisteners -1 //subtract the bot
-		listeners += bot.get('voiceListeners') || 0;
+
 		embed.addField("Listeners: ", listeners)
-		embed.setThumbnail("https://quack.life/duckrecords/currentart?" + md5(info.streams[0].songtitle))
-		embed.setFooter('DuckRecords')
-		embed.setURL('https://github.com/TortleWortle/DuckRecords-Discord-bot')
+		embed.setThumbnail(info.track.cover)
+		embed.setFooter('QuackRecords')
+		embed.setURL('https://unitedbygames.net/community/')
 
 		message.channel.send({embed})
 	})

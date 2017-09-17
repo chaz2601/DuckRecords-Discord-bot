@@ -16,4 +16,13 @@ bot.registerModule(require('./modules/radiostats'));
 bot.registerModule(require('./modules/radioplay'));
 bot.registerModule(require('./modules/utilities'));
 
+
+// bot.client.on("ready", () => {
+// 	setInterval(() => {
+// 		bot.setGame("Listeners: " + bot.get('voiceListeners', 0))
+// 	}, 10000)
+// })
+
+// bot.addAfter(() => {})
+
 process.on('unhandledRejection', console.error);
