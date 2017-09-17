@@ -4,6 +4,7 @@
     "node-opus": "^0.2.6",
     "request": "^2.81.0",
     "route-parser": "0.0.5",
-    "tortlebot-core": "^2.1.7"
+    "tortlebot-core": "^2.1.9",
+    "ytdl-core": "^0.17.1"
   }
 }
