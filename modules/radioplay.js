@@ -1,10 +1,8 @@
 const https = require('https');
 const request = require('request')
 const stream = require('stream')
-const ytdl = require('ytdl-core')
 const dispatchers = []
 const connections = []
-const streams = []
 
 
 
@@ -67,63 +65,19 @@ module.exports = (bot) => {
 		}, 5 * 1000)
 	})
 
-	bot.addCommand('play( *site/watch?v=:video)', (payload) => {
-		let message = payload.message
+	bot.addCommand('play', (payload) => {
+		var message = payload.message
 		let id = message.guild.id
-		var video = payload.params.video
-		var site = payload.params.site
-		console.log(payload.params)
-
-		if(site != null && video != null) {
-			if(site.includes("youtube.com") || site.includes("youtu.be") || true) {
-				var voice = getVoiceConnection(message)
-				if(voice != null) {
-					voice.then(connection => {
-						message.guild.id
-						streams[message.guild.id] = ytdl("https://www.youtube.com/watch?v=" + video)
-			        	connection.playStream(streams[message.guild.id])
-
-			        	streams[message.guild.id].on("end", () => {
-			        		streams[message.guild.id] = null
-			        		setTimeout(() => {
-				        		connection.playBroadcast(broadcast)
-				        	}, 300)
-			        	})
-
-			        	streams[message.guild.id].on("error", (error) => {
-			        		streams[message.guild.id] = null
-			        		message.reply(error.message)
-			        		setTimeout(() => {
-				        		connection.playBroadcast(broadcast)
-				        	}, 300)
-			        	})
-			        })
-		        }
-			}
-		}else {
-			console.log("playing normal")
-			var voice = getVoiceConnection(message)
-			if(voice != null) {
-				if(streams[message.guild.id] != null) {
-					streams[message.guild.id].destroy()
-				}
-				voice.then(connection => {
-					console.log("playing broadcast")
-		        	setTimeout(() => {
-		        		connection.playBroadcast(broadcast)
-		        	}, 300)
-		        })
-	        }
-		}
-            
-
-	});
-
-	function getVoiceConnection(message) {
 		let voiceChannel = message.member.voiceChannel
-        if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
-		return voiceChannel.join()
-	}
+            
+        if (!message.guild.voiceConnection) {
+            if (!message.member.voiceChannel) return message.channel.sendMessage('You need to be in a voice channel')
+			voiceChannel.join()
+				.then(connection => {
+	   				connection.playBroadcast(broadcast)            
+				})
+        }
+	});
 
 	bot.addCommand('stop', (payload) => {
 		var message = payload.message
