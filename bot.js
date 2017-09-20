@@ -14,7 +14,7 @@ bot.setPrefix(">")
 
 bot.registerModule(require('./modules/radiostats'));
 bot.registerModule(require('./modules/radioplay'));
-bot.registerModule(require('./modules/utilities'));
+// bot.registerModule(require('./modules/utilities'));
 
 
 // bot.client.on("ready", () => {
