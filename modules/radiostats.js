@@ -12,6 +12,10 @@ module.exports = (bot) => {
 		    		return
 		    	}
 		        var data = JSON.parse(body);
+		        if(data.track == null) {
+		        	bot.setGame('with the radio')
+		        	return
+		        }
 		        // console.log(data)
 		        bot.set('radioinfo', data);
 
